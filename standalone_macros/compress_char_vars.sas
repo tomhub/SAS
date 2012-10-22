@@ -160,7 +160,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     %put Macro &sysmacroname finished in %sysfunc(putn(%sysevalf(%sysfunc(datetime()) - &__startdt), tod.));
 %mend compress_char_vars;
 /* Usage example:
-%compress_char_variables(dsin=sashelp.class,dsout=test);
+%compress_char_vars(dsin=sashelp.class,dsout=test);
 
 
 /**/
