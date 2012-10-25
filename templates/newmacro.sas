@@ -55,7 +55,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     To check when the file was last time modified, see @BLOB.
 
-@BLOB: $ID$
+@BLOB: $Id$
 *******************************************************************************/
 %macro newmacro;
     %put Macro &sysmacroname started.;
