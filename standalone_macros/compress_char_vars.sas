@@ -47,14 +47,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 @Notes: &DSIN should not contain variable names ___LEN1, ___LEN2 - this will
     be used while checking the variable lengths.
 
-
 @BLOB: $Id$
 *******************************************************************************/
 %macro compress_char_vars(dsin=, dsout=, vars=, exclude_vars=);
     %put Macro &sysmacroname started.;
     %local __startdt;
-    %let __startdt = %sysfunc(datetime()); 
-    %macro __skip; %mend __skip;
+    %let __startdt = %sysfunc(datetime());
 
     %* Check if required parameter is non-missing;
     %if %sysevalf(%superq(dsin)=,boolean) %then %do;
@@ -96,9 +94,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     %*get actual list of varialbes to modify;
     proc sql noprint;
-        select distinct upcase(strip(name)) into :__vars_to_modify separated by " "
+        select
+            distinct upcase(strip(name))
+                into :__vars_to_modify separated by " "
             from sashelp.vcolumn
-            where type eq "char" and libname eq "&__libname" and memname eq "&__memname"
+            where type eq "char" and libname eq "&__libname"
+                and memname eq "&__memname"
                  %if %str(&vars) ne %str() %then %do;
                      and indexw(upcase("&vars"), upcase(strip(name)))
                  %end;
@@ -121,7 +122,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         %goto macro_end;
     %end;
 
-    %put Variables to be checked and modified: &__vars_to_modify;
+    %put Variables to check and alter length: &__vars_to_modify;
 
     %local __i __nvars __lenghts;
     %let __nvars = %sysevalf(%sysfunc(lengthn(&__vars_to_modify)) - %sysfunc(lengthn(%sysfunc(compress(&__vars_to_modify)))) + 1);
@@ -131,9 +132,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         %local __len&__i;
     %end;
 
+    %* Get maximum value lenght per variable *;
     data _null_;
         set &dsout(keep=&__vars_to_modify) end=__eof;
-        array __vars_to_modify {*} $ %do __i=1 %to &__nvars; %scan(&__vars_to_modify, &__i) %end; ;
+        array __vars_to_modify {*} $ &__vars_to_modify;
         array __lens{*} %do __i=1 %to &__nvars; __len&__i %end; ;
 
         %* Minimum length for blank variables is 1 *;
@@ -145,7 +147,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
         if __eof then do;
             do __k = 1 to dim(__vars_to_modify);
-                call symput("__len"||strip(put(__k, 8.)), strip(put(__lens[__k], 8.)));
+                call symput("__len"||put(__k, 8.-L), put(__lens[__k], 8.));
             end;
         end;
     run;
@@ -153,7 +155,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     proc sql noprint;
         alter table &dsout
             modify
-            %do __i=1 %to &__nvars;
+            %do __i = 1 %to &__nvars;
                 %if &__i gt 1 %then ,;
                 %scan(&__vars_to_modify, &__i) character(&&__len&__i)
             %end;

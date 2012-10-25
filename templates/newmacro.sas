@@ -61,7 +61,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     %put Macro &sysmacroname started.;
     %local __startdt;
     %let __startdt = %sysfunc(datetime());
-    %macro __skip; %mend __skip;
 
 
     %put SOME CODE HERE;
