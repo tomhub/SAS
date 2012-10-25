@@ -24,7 +24,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -Contributors: <Name2 Surename2>
                <Name4 Surename4> etc..
-    
+
 -Purpose: short description of the macro, what is the reason etc. etc.
 
 -Dependencies: assign_libraries.sas
