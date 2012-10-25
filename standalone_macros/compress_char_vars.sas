@@ -20,31 +20,35 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ********************************************************************************
--Author: Tomas Demcenko
-    
--Purpose: to modify SAS dataset character variable length to maximum length of
-          a value or 1 if all values are missing.
+@Author(s):
+    Tomas Demcenko
 
--Dependencies: 
+@Contributors:
 
--Inputs: <defined by parmeter DSIN>
+@Description: to modify SAS dataset character variable length to maximum length
+    of a value or to length $1 if all values are missing.
 
--Outputs: <defined by parameter DSOUT>
+@Dependencies:
 
--Parameters:
-   Required:
-     DSIN: input dataset, ex. libname.memname or just memname in work.
+@Inputs: &DSIN
 
-   Optional:
-     DSOUT: output dataset, if blank, DSOUT=&DSIN, default: blank
-     VARS: a list of variable names, separated by space, to modify. If blank,
-           all character variables will be analyzed, default: blank
-     EXCLUDE_VARS: a list of variable names, separated by space, to exclude from
-                   the list of variables to modify, default: blank
+@Outputs: &DSOUT
 
--Notes:
-   Input dataset should not contain variable names like ___lenX, where
-   X is 1, 2.. number of character variables to modify.
+@Required parameters:
+    &DSIN: input dataset, ex. libname.memname or just memname if in WORK lib.
+
+@Optional parameters:
+    DSOUT=: output dataset, if blank, DSOUT=&DSIN
+    VARS=: list of variables to check length and modify accordingly. If blank,
+        all character variables will be processed.
+    EXCLUDE_VARS=: a list of variable names to exclude from checking and
+        modifying.
+
+@Notes: &DSIN should not contain variable names ___LEN1, ___LEN2 - this will
+    be used while checking the variable lengths.
+
+
+@BLOB: $Id$
 *******************************************************************************/
 %macro compress_char_vars(dsin=, dsout=, vars=, exclude_vars=);
     %put Macro &sysmacroname started.;
