@@ -20,36 +20,47 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ********************************************************************************
--Author: <Name Surename>
+@Author(s):
+    <Name Surename>
 
--Contributors: <Name2 Surename2>
-               <Name4 Surename4> etc..
+@Contributors:
+    <Name2 Surename2>
+    (<Name4 Surename4> etc..)
 
--Purpose: short description of the macro, what is the reason etc. etc.
+@Description: description of the macro, what is the reason, etc. etc. The long
+    line goes like this. So this is a four chars indent.
 
--Dependencies: assign_libraries.sas
-               another_dependency.sas
+@Dependencies:
+    assign_libraries.sas
+    another_dependency.sas
 
--Inputs: <defined by parmeter DSIN>
+@Inputs: &DSIN
 
--Outputs: <defined by parameter DSOUT>
+@Outputs: &DSOUT WORK.STATIC_OUTPUT WORK.DYNAMIC_OUTPUT_: &&MACRO_VARIABLE
 
--Parameters:
-   Required:
-     DSIN: input dataset, ex. libname.memname or just memname in work.
+@Required parameters:
+    &DSIN: input dataset, ex. libname.memname or just memname if in WORK lib.
 
-   Optional:
-     DSOUT: output dataset, if blank, DSOUT=&DSIN, default: blank
+@Optional parameters:
+    DSOUT=: output dataset, if blank, DSOUT=&DSIN..NEWMACRO To be more
+        specific how to document, this is a very long sentence. As you can see,
+        this is an eight character indentation. Just to make this text look
+        nice.
+    ANOTHER_PARAM=example: as you can see this parameter has a default value
+        set (example)
 
--Notes:
-    Put any related notices here. No need to have version/history - it is kept
-    within git. Explain how macro might do etc etc etc
+@Notes: Put any related notices here. No need to have version/history - it is
+    kept within git repository. Explain how macro might work etc etc etc
+    Don't forget that you can remove anything you don't like in this macro.
+
+    To check when the file was last time modified, see @BLOB.
+
+@BLOB: $ID$
 *******************************************************************************/
-
 %macro newmacro;
     %put Macro &sysmacroname started.;
     %local __startdt;
-    %let __startdt = %sysfunc(datetime()); 
+    %let __startdt = %sysfunc(datetime());
     %macro __skip; %mend __skip;
 
 
