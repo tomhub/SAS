@@ -62,11 +62,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     _TOLOG=YES
 );
     %put Macro &sysmacroname started.;
-    %local __startdt i __name;
+    %local __i __name;
 
     %if %sysevalf(%superq(_RETMVAR)=,boolean) %then %do;
-        %local temp;
-        %let _RETMVAR = temp;
+        %local __temp;
+        %let _RETMVAR = __temp;
     %end;
     %else %do;
         %if &_SETGLOBAL eq YES %then %do;
@@ -75,13 +75,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     %end;
 
     %let &_RETMVAR =;
-    %let i = 1;
-    %do %while(%scan(&MVARS, &i, %str( )) ne %str());
-        %if not %sysevalf(%superq(%scan(&MVARS, &i, %str( )))=,boolean) %then %do;
-            %let &_RETMVAR = &&&_RETMVAR %scan(&MVARS, &i, %str( ));
-            %if &_TOLOG eq YES %then %put Macro variable %scan(&MVARS, &i, %str( )) is blank.;
+    %let __i = 1;
+    %do %while(%scan(&MVARS, &__i, %str( )) ne %str());
+        %if not %sysevalf(%superq(%scan(&MVARS, &__i, %str( )))=,boolean) %then %do;
+            %let &_RETMVAR = &&&_RETMVAR %scan(&MVARS, &__i, %str( ));
+            %if &_TOLOG eq YES %then %put Macro variable %scan(&MVARS, &__i, %str( )) is blank.;
         %end;
-        %let i = %eval(&i + 1);
+        %let __i = %eval(&__i + 1);
     %end;
 
     %if &_RETMVARS eq NO %then %do;
