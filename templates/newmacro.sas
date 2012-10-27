@@ -39,7 +39,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 @Outputs: &DSOUT WORK.STATIC_OUTPUT WORK.DYNAMIC_OUTPUT_: &&MACRO_VARIABLE
 
 @Required parameters:
-    &DSIN: input dataset, ex. libname.memname or just memname if in WORK lib.
+    DSIN=: input dataset, ex. libname.memname or just memname if in WORK lib.
 
 @Optional parameters:
     DSOUT=: output dataset, if blank, DSOUT=&DSIN..NEWMACRO To be more
