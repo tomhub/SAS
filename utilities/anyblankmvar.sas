@@ -1,5 +1,5 @@
 /*******************************************************************************
-Copyright (c) <year> <author>
+Copyright (c) 2012 Tomas Demcenko
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -63,7 +63,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 );
     %put Macro &sysmacroname started.;
     %local __startdt i __name;
-    %*let __startdt = %sysfunc(datetime());
 
     %if %sysevalf(%superq(_RETMVAR)=,boolean) %then %do;
         %local temp;
@@ -89,9 +88,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         %if %sysfunc(%superq(&_RETMVAR)=,boolean) %then %let &_RETMVAR = 0;
         %else %let &_RETMVAR = 1;
     %end;
-
-    %macro_end:
-    %*put Macro &sysmacroname finished in %sysfunc(putn(%sysevalf(%sysfunc(datetime()) - &__startdt), tod.));
 %mend anyblankmvar;
 /* Usage:
 
