@@ -62,7 +62,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     _TOLOG=YES
 );
     %put Macro &sysmacroname started.;
-    %local __i __name;
+    %local __i;
 
     %if %sysevalf(%superq(_RETMVAR)=,boolean) %then %do;
         %local __temp;
