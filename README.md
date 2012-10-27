@@ -1,17 +1,18 @@
 SAS (r) Various Macro Utilities
 ===============================
-The Power to Know: www.sas.com
+Here are macros for SAS. The Power to Know: www.sas.com
 
 
-standalone_macros/      macros run outside procedures and data steps.
+utilites/               macros run outside procedures and data steps.
 templates/              template files
 
 
-standalone_macros/
+utilities/
 ==================
-compress_char_variables         Compress character variable to the maximum length of a variable value.
+anyblankmvar            Check if macro variables are blank
+compress_char_variables Compress character variable to the maximum length of a variable value.
 
 
 templates/
 ==========
-newmacro.sas                    SAS macro template to write a new macro
+newmacro.sas            SAS macro template to write a new macro
