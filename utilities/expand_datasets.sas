@@ -46,8 +46,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     _OUTMVAR=: if blank, then &INMVAR is used to store a list of datasets,
         default: blank
     _EXCLUDE=: libraries and memnames to exclude, default
-    _TOLOG=YES|NO: if YES reports non-existing and duplicate dataset to log,
-        default: YES
 
 @Notes:
 
@@ -56,8 +54,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 %macro expand_datasets(
     INMVAR=,
     _OUTMVAR=,
-    _EXCLUDE=WORK. SASUSER. SASHELP.,
-    _TOLOG=YES
+    _EXCLUDE=WORK. SASUSER. SASHELP
 );
     %put Macro &sysmacroname started.;
     %local __startdt __retblank;
@@ -79,7 +76,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     %if &_OUTMVAR eq %str() %then %let _OUTMVAR = &INMVAR;
 
     %if not %sysevalf(%superq(_EXCLUDE)=,boolean) %then %do;
-        %expand_datasets(INMVAR=_EXCLUDE, _EXCLUDE=, _TOLOG=NO);
+        %expand_datasets(INMVAR=_EXCLUDE, _EXCLUDE=);
     %end;
 
     %local __i __ds __lib __mem;
