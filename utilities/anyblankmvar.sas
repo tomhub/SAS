@@ -62,24 +62,28 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     _TOLOG=YES
 );
     %put Macro &sysmacroname started.;
-    %local __i;
+    %local __i __mvar;
 
     %if %sysevalf(%superq(_RETMVAR)=,boolean) %then %do;
         %local __temp;
         %let _RETMVAR = __temp;
     %end;
-    %else %do;
-        %if &_SETGLOBAL eq YES %then %do;
-            %global &_RETMVAR;
-        %end;
+    %else %if &_SETGLOBAL eq YES %then %do;
+        %global &_RETMVAR;
     %end;
 
     %let &_RETMVAR =;
     %let __i = 1;
     %do %while(%scan(&MVARS, &__i, %str( )) ne %str());
-        %if not %sysevalf(%superq(%scan(&MVARS, &__i, %str( )))=,boolean) %then %do;
-            %let &_RETMVAR = &&&_RETMVAR %scan(&MVARS, &__i, %str( ));
-            %if &_TOLOG eq YES %then %put Macro variable %scan(&MVARS, &__i, %str( )) is blank.;
+        %* check each macro varible sent *;
+        %let __mvar = %scan(&MVARS, &__i, %str( ));
+        %if %sysevalf(%superq(&__mvar)=,boolean) %then %do;
+            %* so it is blank or 0. Check that the value is not 0 either *;
+            %if &&&__mvar ne 0 %then %do;
+                %* So it is blank *;
+                %let &_RETMVAR = &&&_RETMVAR &__mvar;
+                %if &_TOLOG eq YES %then %put Macro variable &__mvar is blank.;
+            %end;
         %end;
         %let __i = %eval(&__i + 1);
     %end;
