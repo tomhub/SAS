@@ -38,7 +38,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     MVARS=: a list of macro variables to get their values uppercased.
 
 @Optional parameters:
-    _EXTEND=NO|YES: if YES, changes N to NO and Y to YES
+    _EXTEND=NO|YES: if YES, changes N to NO and Y to YES, default: NO
 
 @Notes:
 
