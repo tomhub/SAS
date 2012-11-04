@@ -5,6 +5,7 @@ Directory listing
 <pre>
 utilites/                   macros run outside procedures and data steps
 templates/                  template files
+macro_map/                  graphical visualization of dependencies
 </pre>
 -------------------------------------------------------------------------------
 SAS macro listings:
@@ -20,4 +21,11 @@ upcasemvars:                upcases macro variable values
 ## templates/
 <pre>
 newmacro.sas:               SAS macro template to write a new macro
+</pre>
+-------------------------------------------------------------------------------
+## macro_map/
+<pre>
+macrotree.pl                Perl script to generate SAS macro dependencies
+graphiz                     Dot file
+macro_deps.png              Map
 </pre>
