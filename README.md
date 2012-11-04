@@ -9,7 +9,7 @@
 
 ## utilities/
 ------------- 
-** anyblankmvar: check if macro variables are blank
+** anyblankmvar: check if macro variables are blank  
 ** compress_char_variables: compress character variable to the maximum
     length of a variable value.
 ** expand_datasets: checks and expands macro value to dataset names
