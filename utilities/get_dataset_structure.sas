@@ -84,7 +84,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     %* Get list of datasets *;
     %expand_datasets(INMVAR=DSIN, _EXCLUDE=&_EXCLUDE);
 
-    %if %str(&DSIN) %eq %str() %then %do;
+    %if %str(&DSIN) eq %str() %then %do;
         %put Nothing exists to check.;
         %goto macro_end;
     %end;
