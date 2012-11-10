@@ -45,7 +45,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 @Optional parameters:
     _OUTMVAR=: if blank, then &INMVAR is used to store a list of datasets,
         default: blank
-    _EXCLUDE=: libraries and memnames to exclude, default
+    _EXCLUDE=: libraries and memnames to exclude, default: SASUSER. SASHELP.
 
 @Notes:
 
@@ -54,9 +54,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 %macro expand_datasets(
     INMVAR=,
     _OUTMVAR=,
-    _EXCLUDE=WORK. SASUSER. SASHELP
+    _EXCLUDE=SASUSER. SASHELP.
 );
-    %put Macro &sysmacroname started.;
     %local __startdt __retblank;
     %let __startdt = %sysfunc(datetime());
 
@@ -151,11 +150,5 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     quit;
 
     %macro_end:
-    %put Macro &sysmacroname finished in %sysfunc(putn(%sysevalf(%sysfunc(datetime()) - &__startdt), tod.));
+    %put &sysmacroname finished in %sysfunc(putn(%sysevalf(%sysfunc(datetime()) - &__startdt), tod.));
 %mend expand_datasets;
-
-/* Usage:
-
-%newmacro;
-
-/**/
