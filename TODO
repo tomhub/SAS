@@ -1,4 +1,3 @@
 
 Add macros:
-* BALANCE_VAR_LENGTHS - balance length across datasets so that no truncation occures during setting, merging.
 * MAKE_FORMAT         - make SAS format by providing input dataset, format name, value and label
