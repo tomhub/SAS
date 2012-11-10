@@ -69,10 +69,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     %upcasemvars(MVARS=MVAR);
 
-    %local rets i memname libname p d;
+    %local i memname libname p d;
     proc sql noprint;
         select distinct upcase(cats(libname, '.', memname))
-            into :rets separated by " "
+            into :&_RETMVAR separated by " "
             from sashelp.vstable
                 where libname not in ("SASUSER" "SASHELP")
                     and (
