@@ -122,6 +122,19 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         %goto macro_end;
     %end;
 
+    %* check if dataset has at least one obs, otherwise, do nothing *;
+    %local __dsid __rc __nobs;
+    %let __dsid = %sysfunc(open(&dsout));
+    %let __nobs = %sysfunc(attrn(&__dsid, NOBS));
+    %* just in case we did not get the NOBS *;
+    %if &__nobs eq -1 %then %let __nobs = %sysfunc(attrn(&dsid, NLOBSF));
+    %let __rc = %sysfunc(close(&__dsid));
+
+    %if &__nobs lt 1 %then %do;
+        %put No obs - cannot check any value length, exiting..;
+        %goto macro_end;
+    %end;
+
     %put Variables to check and alter length: &__vars_to_modify;
 
     %local __i __nvars __lenghts;
