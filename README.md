@@ -16,6 +16,7 @@ anyblankmvar:               check if macro variables are blank
 compress_char_variables:    compress character variable to the maximum length of a variable value
 expand_datasets:            checks and expands macro value to dataset names
 upcasemvars:                upcases macro variable values
+balancecharvars:            changes char variables across datasets to avoid truncations
 </pre>
 -------------------------------------------------------------------------------
 ## templates/

@@ -5,6 +5,8 @@ digraph unix {
 "get_dataset_structure.sas" -> "anyblankmvar.sas"
 "get_dataset_structure.sas" -> "expand_datasets.sas"
 "get_dataset_structure.sas" -> "upcasemvars.sas"
+"balancecharvars.sas" -> "anyblankmvar.sas"
+"balancecharvars.sas" -> "expand_datasets.sas"
 "anyblankmvar.sas"
 "compress_char_vars.sas"
 "upcasemvars.sas"

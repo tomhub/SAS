@@ -80,7 +80,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         %let __memname = %upcase(&dsin);
     %end;
 
-
     %* get output libname and memname;
     %local __outlib __outname;
     %if %index(&dsout, .) %then %do;
