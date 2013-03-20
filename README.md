@@ -17,6 +17,7 @@ compress_char_variables:    compress character variable to the maximum length of
 expand_datasets:            checks and expands macro value to dataset names
 upcasemvars:                upcases macro variable values
 balancecharvars:            changes char variables across datasets to avoid truncations
+mergesupp:                  merge supplemental qualifiers datasets back to the domain
 </pre>
 -------------------------------------------------------------------------------
 ## templates/
