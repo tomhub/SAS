@@ -66,7 +66,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     %if not %index(&DSIN, %str(.)) %then %let DSIN = WORK.%upcase(&DSIN);
     %else %let dsin = %upcase(&dsin);
 
-    %local libname memname supps i sup idvars idvar id;
+    %local libname memname supps i sup idvars idvar id dsid rc type suppvars;
     %let libname = %scan(&DSIN, 1, %str(.));
     %let memname = %scan(&DSIN, 2, %str(.));
 
@@ -133,7 +133,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
         %if %str(&idvar) eq %str("") %then %let id = ;
         %else %let id = idvar idvarval;
-        proc transpose data=__TMP01(where=(idvar eq &idvar)) out=__TMP02;
+        proc transpose data=__TMP01(where=(idvar eq &idvar)) out=__TMP02(drop=_NAME_ _LABEL_);
             by studyid usubjid rdomain &id;
             id qnam;
             idlabel qlabel;
@@ -141,13 +141,50 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         run;
 
         %*check if variable is numeric - if yes, input IDVARVAL as best.;
-        
+        %let idvar = %sysfunc(compress(&idvar, , adk));
+        %if &IDVAR ne %str() %then %do;
+            %let dsid = %sysfunc(open(&dsout.));
+            %let type = %sysfunc(vartype(&dsid, %sysfunc(varnum(&dsid, &idvar))));
+            %let rc = %sysfunc(close(&dsid));
+
+            data __TMP02;
+                set __TMP02;
+                %if &type eq N %then %do;
+                    &idvar = input(idvarval, best.));
+                %end;
+                %else %do;
+                    &idvar = idvarval;
+                %end;
+                domain = rdomain;
+            run;
+        %end;
 
         data &dsout;
             if _N_ eq 1 then do;
-                if 0 
+                if 0 then set &dsout __TMP02;
+                declare hash hsupp(dataset:"__TMP02");
+                hsupp.defineKey("STUDYID", "DOMAIN", "USUBJID"
+                    %if &idvar ne %str() %then %do;
+                        ,"&IDVAR"
+                    %end;
+                );
+                hsupp.defineData(all:'yes');
+                hsupp.defineDone();
+            end;
+            set &dsout;
+            drop __rc;
+            __rc = hsupp.check();
+            if __rc eq 0 then rc = hsupp.find();
+        run;
 
         %let i = %eval(&i + 1);
+    %end;
+
+    %if %sysfunc(exist(__TMP01)) %then %do;
+        proc datasets library=work nolist force;
+            delete __TMP01 __TMP02;
+            run;
+        quit;
     %end;
 
     %macro_end:
