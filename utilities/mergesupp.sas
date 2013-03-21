@@ -29,7 +29,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 @Dependencies:
 
-@Inputs: &DSIN &SUPPDSIN
+@Inputs: &DSIN &SUPPDS
 
 @Outputs: &DSOUT
 
@@ -53,7 +53,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     %local __startdt;
     %let __startdt = %sysfunc(datetime());
 
-    %if %sysfunc(%superq(DSIN)=,boolean) %then %do;
+    %if %sysevalf(%superq(DSIN)=,boolean) %then %do;
         %put DSIN is a required parameter.;
         %goto macro_end;
     %end;
@@ -88,7 +88,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                     catx('.', libname, memname) in
                         (
                             %let i = 1;
-                            %do %while(%scan(%str(&SUPPDS), &i, %str( )));
+                            %do %while(%scan(%str(&SUPPDS), &i, %str( )) ne %str());
                                 %let sup = %scan(%str(&SUPPDS), &i, %str( ));
                                 %if not %sysfunc(exist(&sup)) %then %do;
                                     %put WA%str()RNING: supplemental dataset &SUP does not exist.;
@@ -107,7 +107,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         set &dsin;
     run;
 
-    %if %str(&supps) eq %str() %then %do;
+    %if %superq(supps) eq %str() %then %do;
         %put NOTE: no supplemental datasets found.;
         %goto macro_end;
     %end;
@@ -118,7 +118,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         set &supps;
     run;
 
-    proc sort data=_TMP01;
+    proc sort data=__TMP01;
         by studyid usubjid rdomain idvar idvarval;
     run;
 
@@ -128,7 +128,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     quit;
 
     %let i = 1;
-    %do %while(%scan(%str(&idvars), &i, %str( ))) %then %do;
+    %do %while(%scan(%str(&idvars), &i, %str( )) ne %str());
         %let idvar = %scan(%str(&idvars), &i, %str( ));
 
         %if %str(&idvar) eq %str("") %then %let id = ;
@@ -142,22 +142,28 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
         %*check if variable is numeric - if yes, input IDVARVAL as best.;
         %let idvar = %sysfunc(compress(&idvar, , adk));
-        %if &IDVAR ne %str() %then %do;
-            %let dsid = %sysfunc(open(&dsout.));
-            %let type = %sysfunc(vartype(&dsid, %sysfunc(varnum(&dsid, &idvar))));
-            %let rc = %sysfunc(close(&dsid));
+        data __TMP02;
+            set __TMP02;
+            %if &IDVAR ne %str() %then %do;
+                %let dsid = %sysfunc(open(&dsout.));
+                %let type = %sysfunc(vartype(&dsid, %sysfunc(varnum(&dsid, &idvar))));
+                %let rc = %sysfunc(close(&dsid));
 
-            data __TMP02;
-                set __TMP02;
                 %if &type eq N %then %do;
-                    &idvar = input(idvarval, best.));
+                    &idvar = input(idvarval, best.);
                 %end;
                 %else %do;
                     &idvar = idvarval;
                 %end;
-                domain = rdomain;
-            run;
-        %end;
+            %end;
+            domain = rdomain;
+        run;
+
+        %* initialize new variables from __TMP02 *;
+        data &dsout;
+            set &dsout;
+            if 0 then set __TMP02;
+        run;
 
         data &dsout;
             if _N_ eq 1 then do;
@@ -171,10 +177,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 hsupp.defineData(all:'yes');
                 hsupp.defineDone();
             end;
+
             set &dsout;
             drop __rc;
             __rc = hsupp.check();
-            if __rc eq 0 then rc = hsupp.find();
+            if __rc eq 0 then __rc = hsupp.find();
         run;
 
         %let i = %eval(&i + 1);
@@ -196,3 +203,4 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 %mergesupp(dsin=sdtm.dm, suppds=sdtm.suppdm, dsout=work.dm_v);
 
 /**/
+
